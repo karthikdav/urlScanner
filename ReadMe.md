@@ -131,14 +131,18 @@ database=urlscanner
 
 ``` curl --location --request GET 'http://localhost:3200/rest/api/v1/urlScanner/isSafeUrl?hostname=https://www.malware.com&originalpathquerystring=/test' ```
 
-- Sample Response:
-- Fetch record for specific id:
+
+hostname, port (optional) and originalpathquerystring should be sent as named query parameter after encoding. The service will decode and process the data further.
+
+Positive response : Status 200, The Url is clean
+
+Negative response : Status 400, The URL is unsafe
+
+Exception : Status 200, Exception occured in dblayer
+
+
+Fetching record for specific id:
 
 ``` GET http://localhost:8100/rest/api/v1/urlScanner/<id> ```
 
-- Hostname, Port (optional) and Query Path should be sent as named query parameter after encoding. 
-- The service will decode and process the data further.
-- Positive response : Status 200, The Url is clean
-- Negative response : Status 400, The URL is unsafe
-- Exception : Status 200, Exception occured in dblayer
 
