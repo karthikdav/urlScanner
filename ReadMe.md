@@ -18,24 +18,29 @@ All configurations are configured in config.ini
 
 Here are the sequence of commands to be executed in a clean RHEL 8 VM to run this project.
 
-1. Install Python 3.x : yum install python3
-2. Extract project tar : tar xvf urlScanner_latest.tar
-3. Go to extracted folder : cd urlScanner_latest/
-4. Install all dependencies : pip3 install -r requirements.txt
-5. To Install MySQL, execute following commands in order :
-      - rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm
-      - sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
-      - yum module disable mysql
-      - yum --enablerepo=mysql80-community install mysql-community-server
-      - service mysqld status
-      - service mysqld start
-      - service mysqld status
-      - grep "A temporary password" /var/log/mysqld.log
-
+1. Install Python 3.x : 
+``` yum install python3 ```
+3. Extract project tar : 
+``` tar xvf urlScanner_latest.tar ```
+5. Go to extracted folder : 
+``` cd urlScanner_latest/ ```
+7. Install all dependencies : 
+``` pip3 install -r requirements.txt ```
+9. To Install MySQL, execute following commands in order :
+      ```
+      rpm -Uvh https://repo.mysql.com/mysql80-community-release-el7-3.noarch.rpm
+      sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
+      yum module disable mysql
+      yum --enablerepo=mysql80-community install mysql-community-server
+      service mysqld status
+      service mysqld start
+      service mysqld status
+      grep "A temporary password" /var/log/mysqld.log
+      ```
       [ for the following command, give temp password for root, change the root password, and give "y" to all 4 questions]
       - mysql_secure_installation
 
-      [root@192 urlScanner_latest]# mysql_secure_installation
+      ``` mysql_secure_installation ```
 
       Securing the MySQL server deployment.
 
@@ -47,65 +52,54 @@ Here are the sequence of commands to be executed in a clean RHEL 8 VM to run thi
       Remove test database and access to it? (Press y|Y for Yes, any other key for No) : y
       Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y
 
-      service mysqld restart
+      ``` service mysqld restart ```
 
   6. To setup database, execute the following commands and provide DB root user password when prompted.
-      - mysql -u root -p -e "show databases;"
-      - mysql -u root -p -e "CREATE DATABASE urlscanner1;"
-      - mysql -u root -p -e "show databases;"
-      - mysql -u root -p -e "use urlscanner; show tables;"
-      - mysql -u root -p -e "CREATE TABLE url_db (     id int NOT NULL AUTO_INCREMENT,     URL varchar(10000) NOT NULL,     PRIMARY KEY (id) );"
-      - mysql -u root -p -e "show tables;"
-      - mysql -u root -p -e "use urlscanner; select * from url_db;"
+      ``` mysql -u root -p -e "show databases;" ```
+      ``` mysql -u root -p -e "CREATE DATABASE urlscanner1;" ```
+      ``` mysql -u root -p -e "show databases;" ```
+      ``` mysql -u root -p -e "use urlscanner; show tables;" ```
+      ``` mysql -u root -p -e "CREATE TABLE url_db (     id int NOT NULL AUTO_INCREMENT,     URL varchar(10000) NOT NULL,     PRIMARY KEY (id) );" ```
+      ``` mysql -u root -p -e "show tables;" ```
+      ``` mysql -u root -p -e "use urlscanner; select * from url_db;" ```
 
 7. Update config.ini with the username/password
-8. To run UT cases : python3 -m unittest unit.MyTestCase
-8. Run the urlScanner app : python3 main.py
+8. To run UT cases : ``` python3 -m unittest unit.MyTestCase ```
+8. Run the urlScanner app : ``` python3 main.py ```
 9. To run automated FT cases
 10. To run FT cases manually to test REST API calls and output :
 
-- curl http://<IP>:3200/
-- curl http://<IP>:3200/rest/api/v1/urlScanner/all
-- curl -X POST http://<IP>:3200/rest/api/v1/urlScanner/add -H "Content-Type: application/x-www-form-urlencoded" -d "insert_url=https://www.malware.com/test"
-- curl  http://<IP>:3200/rest/api/v1/urlScanner/all
-- curl --location --request GET 'http://<IP>:3200/rest/api/v1/urlScanner/isSafeUrl?hostname=https://www.malware.com&originalpathquerystring=/test'
+App Check
+``` curl http://localhost:3200/ ```
+Sample Response:
 
-
-
-### **API's available**
 Fetch all records:
-
-GET http://localhost:8100/rest/api/v1/urlScanner/all
-
+``` curl http://localhost:3200/rest/api/v1/urlScanner/all  ```
 Sample Response:
 
 [{"id": 1, "URL": "http://10.10.10.10:9000/test/urlmalware"}, {"id": 2, "URL": "http://10.10.10.10:9000/test/scanner"},
 {"id": 3, "URL": "http://10.120.34.12/failure/test"}, {"id": 5, "URL": "http://10.10.10.10:9000/test/urlmalware"}]
 
-Fetch record for specific id:
-
-GET http://localhost:8100/rest/api/v1/urlScanner/<id>
-
 Insert a record:
-
-POST http://localhost:8100/rest/api/v1/urlScanner/add
-
 `URL should be sent in as form data with key as insert_url. The URL will be directly inserted without any validation.`
+``` curl -X POST http://localhost:3200/rest/api/v1/urlScanner/add -H "Content-Type: application/x-www-form-urlencoded" -d "insert_url=https://www.malware.com/test" ```
+Sample Response:
 
+
+    
 Update a record :
-
-PUT http://localhost:8100/rest/api/v1/urlScanner/<id>
-
+``` PUT http://localhost:8100/rest/api/v1/urlScanner/<id> ```
 `Send the updated url as part of form data with key as update_url and the id in the request url.`
 
 Delete a record:
+``` DELETE http://localhost:8100/rest/api/v1/urlScanner/<id> ```
 
-DELETE http://localhost:8100/rest/api/v1/urlScanner/<id>
-
+    
 For Malicious url look up:
-
-GET http://localhost:8100/rest/api/v1/urlScanner/isSafeUrl
-
+``` curl --location --request GET 'http://localhost:3200/rest/api/v1/urlScanner/isSafeUrl?hostname=https://www.malware.com&originalpathquerystring=/test' ```
+Sample Response:
+Fetch record for specific id:
+``` GET http://localhost:8100/rest/api/v1/urlScanner/<id> ```
 `Hostname, Port (optional) and Query Path should be sent as named query parameter after encoding. The service will decode and process the data further.`
 
 Positive response : Status 200, The Url is clean
@@ -113,3 +107,4 @@ Positive response : Status 200, The Url is clean
 Negative response : Status 400, The URL is unsafe
 
 Exception : Status 200, Exception occured in dblayer
+
