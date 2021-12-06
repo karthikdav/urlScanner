@@ -91,6 +91,7 @@ database=urlscanner
 ##### 9. Run the urlScanner app 
 ``` python3 main.py ```
 ##### 10. Open another terminal for the server and run automated FT cases
+``` python3 -m unittest api_test.AppUnitTest ```
 ##### 11. Open another terminal for the server and run FT cases manually to test REST API calls and output 
 
 - App Check
