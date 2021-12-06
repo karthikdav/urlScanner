@@ -16,6 +16,20 @@ def start_db():
     return mydb
 
 
+def truncate_table():
+    try:
+        mydb = start_db()
+        cursor = mydb.cursor(dictionary=True)
+        cursor.execute("TRUNCATE TABLE url_db")
+        return 1
+    except Exception as e:
+        print(e)
+        return 0
+    finally:
+        cursor.close()
+        mydb.close()
+
+
 def get_all_records():
     try:
         mydb = start_db()
