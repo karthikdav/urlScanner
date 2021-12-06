@@ -81,8 +81,8 @@ You can achieve the following by executing the given commands in order.
 port=3200
 
 [DB_CONFIG]
-host=192.168.0.103
-user=admin
+host=127.0.0.1
+user=root
 password=admin
 database=urlscanner
 ```
@@ -95,54 +95,43 @@ database=urlscanner
 ##### 11. Open another terminal for the server and run FT cases manually to test REST API calls and output 
 
 - App Check
-
 ``` curl http://localhost:3200/ ```
+  - Sample Response:
+``` URL Scanner is running on port 3200 ```
 
-- Sample Response:
+- To Insert a record, URL should be sent in as form data with key as insert_url. The URL will be directly inserted without any validation.
+``` curl -X POST http://localhost:3200/rest/api/v1/urlScanner/add -H "Content-Type: application/x-www-form-urlencoded" -d "insert_url=https://www.malware.com/test" ```
+  - Sample Response:
+``` the insert_url is https://www.malware.com/test ```
+
+- Fetching record for specific id:
+``` curl -X GET http://localhost:3200/rest/api/v1/urlScanner/1 ```
+  - Sample Response:
+``` [{"id": 1, "URL": "https://www.malware.com/test"} ```
 
 - Fetch all records:
-
 ``` curl http://localhost:3200/rest/api/v1/urlScanner/all  ```
+  - Sample Response:
+``` [{"id": 1, "URL": "https://www.malware.com/test"}] ```
 
-- Sample Response:
 
-[{"id": 1, "URL": "http://10.10.10.10:9000/test/urlmalware"}, {"id": 2, "URL": "http://10.10.10.10:9000/test/scanner"},
-{"id": 3, "URL": "http://10.120.34.12/failure/test"}, {"id": 5, "URL": "http://10.10.10.10:9000/test/urlmalware"}]
-
-- Insert a record:
-- URL should be sent in as form data with key as insert_url. 
-- The URL will be directly inserted without any validation.
-
-``` curl -X POST http://localhost:3200/rest/api/v1/urlScanner/add -H "Content-Type: application/x-www-form-urlencoded" -d "insert_url=https://www.malware.com/test" ```
-- Sample Response:
-    
-- Update a record :
-
-``` PUT http://localhost:8100/rest/api/v1/urlScanner/<id> ```
-
-- Send the updated url as part of form data with key as update_url and the id in the request url.
+- To Update a record, send the updated url as part of form data with key as update_url and the id in the request url.
+``` curl -X PUT http://localhost:3200/rest/api/v1/urlScanner/1 -H "Content-Type: application/x-www-form-urlencoded" -d "update_url=https://www.malware.com/tested" ```
+  - Sample Response:
+``` url id with 1 is updated with url string https://www.malware.com/tested ```
 
 - Delete a record:
-
-``` DELETE http://localhost:8100/rest/api/v1/urlScanner/<id> ```
-
+``` curl -X DELETE http://localhost:3200/rest/api/v1/urlScanner/1 ```
+  - Sample Response:
+``` url id with 1 is Deleted ```
     
 - For Malicious url look up:
-
 ``` curl --location --request GET 'http://localhost:3200/rest/api/v1/urlScanner/isSafeUrl?hostname=https://www.malware.com&originalpathquerystring=/test' ```
-
-
-hostname, port (optional) and originalpathquerystring should be sent as named query parameter after encoding. The service will decode and process the data further.
-
-Positive response : Status 200, The Url is clean
-
-Negative response : Status 400, The URL is unsafe
-
-Exception : Status 200, Exception occured in dblayer
-
-
-Fetching record for specific id:
-
-``` GET http://localhost:8100/rest/api/v1/urlScanner/<id> ```
-
+  - Sample Response:
+``` The URL is unsafe ```
+    - hostname, port (optional) and originalpathquerystring should be sent as named query parameter after encoding. 
+    - The service will decode and process the data further.
+    - Positive response : Status 200, The Url is clean
+    - Negative response : Status 400, The URL is unsafe
+    - Exception : Status 200, Exception occured in dblayer
 
