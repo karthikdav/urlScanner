@@ -112,7 +112,7 @@ For Malicious url look up:
 ``` curl --location --request GET 'http://localhost:3200/rest/api/v1/urlScanner/isSafeUrl?hostname=https://www.malware.com&originalpathquerystring=/test' ```
 
 
-Hostname, Port (optional) and Query Path should be sent as named query parameter after encoding. The service will decode and process the data further.
+hostname, port (optional) and originalpathquerystring should be sent as named query parameter after encoding. The service will decode and process the data further.
 
 Positive response : Status 200, The Url is clean
 
