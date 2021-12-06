@@ -64,11 +64,11 @@ Here are the sequence of commands to be executed in a clean RHEL 8 VM to run thi
 9. To run automated FT cases
 10. To run FT cases manually to test REST API calls and output :
 
-curl http://192.168.0.103:3200/
-curl http://192.168.0.103:3200/rest/api/v1/urlScanner/all
-curl -X POST http://192.168.0.103:3200/rest/api/v1/urlScanner/add -H "Content-Type: application/x-www-form-urlencoded" -d "insert_url=https://www.malware.com/test"
-curl  http://192.168.0.103:3200/rest/api/v1/urlScanner/all
-curl --location --request GET 'http://192.168.0.103:3200/rest/api/v1/urlScanner/isSafeUrl?hostname=https://www.malware.com&originalpathquerystring=/test'
+curl http://<IP>:3200/
+curl http://<IP>:3200/rest/api/v1/urlScanner/all
+curl -X POST http://<IP>:3200/rest/api/v1/urlScanner/add -H "Content-Type: application/x-www-form-urlencoded" -d "insert_url=https://www.malware.com/test"
+curl  http://<IP>:3200/rest/api/v1/urlScanner/all
+curl --location --request GET 'http://<IP>:3200/rest/api/v1/urlScanner/isSafeUrl?hostname=https://www.malware.com&originalpathquerystring=/test'
 
 
 
