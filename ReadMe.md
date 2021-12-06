@@ -1,6 +1,6 @@
 ## **URL Scanner using Python**
-This project is used as lookup for the URL that is passed and verified against the
-known list of malicious URL's in DB. This project has various CRUD operation for records in database
+This project is used as lookup for the URL that is passed and verified against the known list of malicious URL's in DB. 
+This project has various CRUD operation for records in database
 
 ### **Setting up the project**
 
@@ -24,7 +24,7 @@ You can achieve the following by executing the given commands in order.
 - Make sure that all the dependencies are met before runnig the project for running the requirements.txt.
 - All configurations are configured in config.ini
 - All DB related config should go below DB_CONFIG and Flask related settings to FLASK_APP. 
-- For flask only port needs to be configured and for DB Hostname, User, Password and DB Name. This will be consumed in the program.`
+- For flask only port needs to be configured and for DB Hostname, User, Password and DB Name. This will be consumed in the program.
 
 #### Here are the sequence of commands to be executed in a clean RHEL 8 VM to run this project.
 
@@ -61,9 +61,8 @@ You can achieve the following by executing the given commands in order.
       Disallow root login remotely? (Press y|Y for Yes, any other key for No) : y
       Remove test database and access to it? (Press y|Y for Yes, any other key for No) : y
       Reload privilege tables now? (Press y|Y for Yes, any other key for No) : y
-      
 
-      service mysqld restart
+      Restart MYSQL : service mysqld restart
 
  ##### 6. To setup database, execute the following commands and provide DB root user password when prompted.
        
@@ -77,12 +76,22 @@ You can achieve the following by executing the given commands in order.
       
 
 ##### 7. Update config.ini with the username/password
+```
+[FLASK_APP]
+port=3200
+
+[DB_CONFIG]
+host=192.168.0.103
+user=admin
+password=admin
+database=urlscanner
+```
 ##### 8. To run UT cases : 
 ``` python3 -m unittest unit.MyTestCase ```
-##### 9. Run the urlScanner app : 
+##### 9. Run the urlScanner app 
 ``` python3 main.py ```
-##### 10. To run automated FT cases
-##### 11. To run FT cases manually to test REST API calls and output :
+##### 10. Open another terminal for the server and run automated FT cases
+##### 11. Open another terminal for the server and run FT cases manually to test REST API calls and output 
 
 - App Check
 
